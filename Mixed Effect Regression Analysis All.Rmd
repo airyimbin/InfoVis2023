@@ -1,0 +1,52 @@
+---
+title: "Mixed Effect Analysis"
+author: "Elijah Chou"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Mixed Regression Analysis for Information Visualization
+
+Libraries needed for mixed effect regression analysis. Follows an example described here: https://ademos.people.uic.edu/Chapter17.html.
+
+
+```{r libraries}
+library (rlang) # Helps resolve rlang compatibility issues with lmerTest package
+library (lmerTest) # Mixed model package by Douglas Bates, comes w/ pvalues! 
+library (texreg) #Helps us make tables of the mixed models
+library (afex) # Easy ANOVA package to compare model fits
+library (plyr) # Data manipulator package
+library (ggplot2) # GGplot package for visualizing data
+library (emmeans)
+```
+
+## Reading Data Exported from Python
+
+
+```{r pressure, echo=FALSE}
+data <- read.csv(file="finalData.csv")
+#data <- data[!(data$Trend==3),] #Run this line to do analysis on positive & neutral trends
+#data <- data[(data$Trend==1),] #Run this line to do analysis on positive trend
+#data <- data[(data$Fear==1),] #Run this line to do analysis on only Tourism data
+#data <- data[(data$Fear==1),] #Run this line to do analysis on only Disease data
+head(data)
+unique(data$Fear)
+```
+#Running Between and Within Subject Analysis with ANOVA
+
+# Final Comparison for InfoVis
+```{r}
+m2.1=lmer(Response ~ Anthropographic + Medium + (Anthropographic + Fear|PID), data=data, REML=T)
+
+anova(m2.1)
+
+```
+```{r}
+summary(m2.1)
+```
+
+
